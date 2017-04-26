@@ -29,10 +29,14 @@ public class AppTest
     }
 
     /**
-     * Rigourous Test :-)
+     * 
      */
     public void testApp()
     {
-        assertTrue( true );
+		App app = new App();
+		app.main(null);
+	    assertTrue( true );
     }
+    
+    
 }
