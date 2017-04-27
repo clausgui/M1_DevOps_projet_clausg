@@ -2,6 +2,7 @@ FROM ubuntu:14.04
 
 RUN apt-get update
 #### installing JDK
+RUN ls
 
 RUN apt-get install -y openjdk-7-jdk
 
