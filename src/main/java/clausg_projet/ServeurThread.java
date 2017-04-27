@@ -12,7 +12,7 @@ public class ServeurThread  extends Thread  {
 	private static int nextid = 1;
 	private Socket socket;
 	private int id;
-	
+
 	public ServeurThread(Socket socket) {
 		this.id = nextid++;
 		this.socket = socket;
@@ -25,8 +25,9 @@ public class ServeurThread  extends Thread  {
 			BufferedReader in = new BufferedReader (new InputStreamReader (socket.getInputStream()));
 			String message_distant = in.readLine();
 			System.out.println(message_distant);
+			socket.close();
 		} catch (java.io.IOException e) {
-			System.out.println("ServeurThread error : " + e.getMessage());
+			System.err.println("ServeurThread error : " + e.getMessage());
 		}
 		System.out.println("ServeurThread " + id + " terminé");
 	}

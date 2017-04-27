@@ -9,43 +9,30 @@ import java.net.Socket;
  * @class Client
  */
 public class Client {
-	private static final int defaultServeurPort = 5342;
-	private static final String defaultServeurAddr = "127.0.0.1";
-	private static Socket socket;
-	private static int serveurPort;
-	private static String serveurAddr;
+	private static int nextId = 0;
+	private Socket socket;
+	private int serveurPort;
+	private String serveurAddr;
+	private int id;
 
-
-    public static void main(String[] args) {
-		if (args != null) {
-			if (args.length >= 2) {
-				serveurAddr = args[0];
-				serveurPort = Integer.parseInt(args[1]);
-			} else if (args.length == 1) {
-				serveurAddr = defaultServeurAddr;
-				serveurPort = Integer.parseInt(args[0]);
-			} else {
-				serveurAddr = defaultServeurAddr;
-				serveurPort = defaultServeurPort;
-			}
-		} else {
-			serveurAddr = defaultServeurAddr;
-			serveurPort = defaultServeurPort;
-		}
-
-		try {
-			socket = new Socket(InetAddress.getByName(serveurAddr), serveurPort);
-
-            PrintWriter out = new PrintWriter(socket.getOutputStream());
-
-                out.println("Vous êtes connecté zéro !");
-
-                out.flush();
-
-
-		} catch (IOException e) {
-			System.out.println("Client error : " + e.getMessage());
-		}
+	public Client(String serveurA, int serveurP) {
+		id = nextId++;
+		serveurAddr = serveurA;
+		serveurPort = serveurP;
 	}
 
+
+	public void start() {
+		System.out.println("Démarrage du client " + id + " sur le port " + serveurPort);
+		try {
+			socket = new Socket(InetAddress.getByName(serveurAddr), serveurPort);
+			PrintWriter out = new PrintWriter(socket.getOutputStream());
+			out.print("Message du client" + id);
+			out.flush();
+			socket.close();
+		} catch (IOException e) {
+			System.err.println("Client error : " + e.getMessage());
+		}
+
+	}
 }
