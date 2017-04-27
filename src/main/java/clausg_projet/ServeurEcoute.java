@@ -15,6 +15,7 @@ public class ServeurEcoute extends Thread  {
 
 	
 	public ServeurEcoute(int port) {
+
 		this.port = port;
 		continuer = true;
 	}
@@ -32,7 +33,7 @@ public class ServeurEcoute extends Thread  {
 			}
 			System.out.println("Serveur Arrêté");
 		} catch (IOException e) {
-			System.out.println("Problème de connexion : ");
+			System.out.println("Problème de connexion : " + e.getMessage());
 		}
 	}
 

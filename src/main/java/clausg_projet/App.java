@@ -27,6 +27,5 @@ public class App {
 		serveur = new ServeurEcoute(serveurPort);
 		System.out.println("Lancement du serveur sur le port " + serveurPort);
 		serveur.start();
-		serveur.halt();
     }
 }
