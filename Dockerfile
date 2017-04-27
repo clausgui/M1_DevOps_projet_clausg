@@ -1,11 +1,7 @@
-FROM ubuntu:14.04
+FROM java:8
 
-RUN apt-get update
-#### installing JDK
-RUN ls
+EXPOSE 8080
 
-RUN apt-get install -y openjdk-7-jdk
+ADD /target/M1_DevOps_projet_clausg-1.0.jar projet.jar
 
-ADD target/M1_DevOps_projet_clausg-1.0.jar file.jar
-
-ENTRYPOINT ["java", "-cp", "file.jar", "clausg_projet.AppServeur"]
+ENTRYPOINT ["java", "-cp", "projet.jar", "clausg_projet.AppServeur"]
