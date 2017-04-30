@@ -6,3 +6,16 @@ Projet pour M1 info DevOps
 • Une liste et une courte description des images disponibles sur Docker Hub, le cas échéant.
 • Une partie feedback dans laquelle vous donnerez votre retour d’expérience sur Travis. Vous
 pouvez aussi y ajouter vos commentaires/suggestions par rapport au projet.
+
+
+# Génération de la documentation:
+mvn javadoc:javadoc
+
+# Utilisation de docker :
+# Construction des images docker
+docker build -t client -f Dockerfile_client ./
+docker build -t serveur -f Dockerfile_seveur ./
+#utilisation
+
+docker run -ti -p5432:5432 --name serv serveur
+docker run -ti --link serv:serveur client
