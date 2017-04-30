@@ -1,14 +1,17 @@
-package clausg_projet;
+package clausg_projet.serveur;
 
 import java.io.IOException;
 import org.junit.*;
 import static org.junit.Assert.assertTrue;
 import org.junit.rules.Timeout;
 
+import clausg_projet.MemStore;
+import clausg_projet.client.Client;
+
 /**
- * Unit test for ServeurThread
+ * Unit test for ServeurEcouteTest.
  */
-public class ServeurThreadTest {
+public class ServeurEcouteTest {
 	@Rule
 	public Timeout globalTimeout= new Timeout(5000);
 
@@ -18,7 +21,7 @@ public class ServeurThreadTest {
 
 	@Before
 	public void startServeur() {
-		serveur = new ServeurEcoute(port);
+		serveur = new ServeurEcoute(port, new MemStore());
 		serveur.start();
 	}
 
@@ -41,7 +44,7 @@ public class ServeurThreadTest {
      */
 	@Test
     public void testServeurEcouteException(){
-		ServeurEcoute serveur2 = new ServeurEcoute(port);
+		ServeurEcoute serveur2 = new ServeurEcoute(port, new MemStore());
 		serveur2.start();
     }
 

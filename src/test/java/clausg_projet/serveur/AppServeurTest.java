@@ -1,10 +1,11 @@
-package clausg_projet;
+package clausg_projet.serveur;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import org.junit.*;
 import static org.junit.Assert.assertTrue;
 import org.junit.rules.Timeout;
+
 
 /**
  * Unit test for AppServeur.

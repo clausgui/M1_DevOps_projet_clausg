@@ -1,8 +1,10 @@
-package clausg_projet;
+package clausg_projet.serveur;
 
 
 import java.lang.NumberFormatException;
 import java.util.Scanner;
+
+import clausg_projet.MemStore;
 
 /**
  * AppServeur
@@ -32,7 +34,7 @@ public class AppServeur {
 			serveurPort = (port);
 		}
 
-		serveur = new ServeurEcoute(serveurPort);
+		serveur = new ServeurEcoute(serveurPort, mstore);
 		System.out.println("Lancement du serveur sur le port " + serveurPort);
 		serveur.start();
 		Scanner in = new Scanner(System.in);

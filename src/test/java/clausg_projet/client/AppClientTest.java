@@ -1,4 +1,4 @@
-package clausg_projet;
+package clausg_projet.client;
 
 import org.junit.*;
 import static org.junit.Assert.assertTrue;

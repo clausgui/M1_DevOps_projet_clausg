@@ -1,4 +1,4 @@
-package clausg_projet;
+package clausg_projet.client;
 
 import java.io.IOException;
 import org.junit.*;
@@ -22,5 +22,6 @@ public class ClientTest {
     public void testClient() {
 		Client client = new Client(addr, port);
 		client.start();
+// 		client.stop();
     }
 }
