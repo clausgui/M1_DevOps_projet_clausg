@@ -1,4 +1,4 @@
-FROM maven:3.3-jdk-8-onbuild
+FROM maven:3.5-jdk-7-onbuild
 
 LABEL maintainer "GuiΩ <guillaume.claus@worldonline.fr>"
 #RUN mvn install
