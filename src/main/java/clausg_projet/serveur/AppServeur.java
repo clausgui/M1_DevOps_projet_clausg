@@ -1,6 +1,7 @@
 package clausg_projet.serveur;
 
 
+import java.io.IOException;
 import java.lang.NumberFormatException;
 import java.util.Scanner;
 
@@ -19,7 +20,6 @@ public class AppServeur {
 
 
     public static void main(String[] args) {
-        System.out.println( "Hello World!" );
 		mstore = new MemStore();
 		if (args == null || args.length < 1) {
 			serveurPort = defaultServeurPort;
@@ -41,7 +41,11 @@ public class AppServeur {
 		System.out.println("Type 'q' to quit.");
 		while(in.hasNext()) {
 			if (in.next().equals("q")) {
-				serveur.halt();
+				try {
+					serveur.halt();
+				} catch (IOException e) {
+					System.err.println(e.getMessage());
+				}
 				return;
 			}
 		}

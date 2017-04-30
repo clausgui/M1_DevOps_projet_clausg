@@ -26,7 +26,7 @@ public class ServeurEcouteTest {
 	}
 
 	@After
-	public void stopServeur() {
+	public void stopServeur() throws IOException {
 		serveur.halt();
 	}
 
@@ -34,7 +34,7 @@ public class ServeurEcouteTest {
      * Test la connection du client
      */
 	@Test
-    public void testServeurEcouteClient() {
+    public void testServeurEcouteClient() throws IOException {
 		Client client = new Client("127.0.0.1", port);
 		client.start();
     }

@@ -1,5 +1,6 @@
 package clausg_projet.client;
 
+import java.io.IOException;
 import java.lang.NumberFormatException;
 
 /**
@@ -7,7 +8,7 @@ import java.lang.NumberFormatException;
  */
 public class AppClient {
 	private static final int defaultServeurPort = 5342;
-	private static final String defaultServeurAddr = "172.17.0.2";
+	private static final String defaultServeurAddr = "127.0.0.1";//"172.17.0.2";
 
 	private static Client client;
 	private static int serveurPort; // port d'écoute du serveur
@@ -37,6 +38,10 @@ public class AppClient {
 		}
 
 		client = new Client(serveurAddr, serveurPort);
-		client.start();
+		try {
+			client.start();
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+		}
     }
 }

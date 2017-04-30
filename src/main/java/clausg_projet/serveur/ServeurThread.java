@@ -41,6 +41,7 @@ public class ServeurThread  extends Thread  {
 					continue;
 				}
 				System.out.println("ServeurThread " + id + " a reçu '" + msg + "'");
+				//TODO : gestion des espaces
 				String[] args = msg.split(" ");
 
 				switch(args[0]) {
@@ -48,7 +49,12 @@ public class ServeurThread  extends Thread  {
 						if (args.length == 2) {
 							key = store.store(args[1]);
 							_send(key);
-						} else if (args.length == 3) {
+						} else {
+							_bad_command();
+						}
+						break;
+					case "STOTO":
+						if (args.length == 3) {
 							key = Integer.valueOf(args[1]);
 							store.store(key, args[2]);
 							_send(key);
@@ -81,27 +87,38 @@ public class ServeurThread  extends Thread  {
 						_bad_command();
 				}
 			}
-			socket.close();
+			_close();
 		} catch (java.io.IOException e) {
-			System.err.println("ServeurThread error : " + e.getMessage());
+			System.err.println("ServeurThread : " + e.getMessage());
 		}
 		System.out.println("ServeurThread " + id + " terminé");
 	}
 
+	public void halt() throws IOException {
+		_close();
+	}
+
 	private void _send(Object msg) {
+		System.out.println("_send(" + msg +")");
 		if (msg == null) {
-			out.print("2 ");
+			out.print("2\n");
 		} else {
-			out.print("1 " + msg.toString());
+			out.print("1 " + msg.toString() + "\n");
 		}
 		out.flush();
 	}
 
 	private void _bad_command() {
-		out.print("0 BAD COMMAND");
+		out.print("0 BAD_COMMAND\n");
 		out.flush();
 	}
 
+	private void _close() throws IOException {
+		if (socket != null) {
+			socket.close();
+			System.out.println("Arrêt du ServeurTread " + id);
+		}
+	}
 
 
 }

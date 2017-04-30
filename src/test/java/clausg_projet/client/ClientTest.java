@@ -2,8 +2,11 @@ package clausg_projet.client;
 
 import java.io.IOException;
 import org.junit.*;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import org.junit.rules.Timeout;
+
+import clausg_projet.MemStore;
+import clausg_projet.serveur.ServeurEcoute;
 
 /**
  * Unit test for Client.
@@ -18,10 +21,46 @@ public class ClientTest {
     /**
      * Test un client sans serveur
      */
-	@Test
-    public void testClient() {
+	@Test (expected = IOException.class)
+    public void testClient() throws IOException  {
 		Client client = new Client(addr, port);
 		client.start();
-// 		client.stop();
+    }
+
+    /**
+     * Test deux clients avec serveur
+     */
+	@Test
+    public void testStartStop() throws IOException  {
+		MemStore ms = new MemStore();
+		ServeurEcoute sv = new ServeurEcoute(port, ms);
+		sv.start();
+		Client client1 = new Client(addr, port);
+		Client client2 = new Client(addr, port);
+		client1.start();
+		client2.start();
+		sv.halt();
+    }
+
+    /**
+     * Teste un store
+     */
+	@Test
+    public void testStore() throws IOException  {
+		String value = "truc";
+		String value2 = "machin";
+		MemStore ms = new MemStore();
+		ServeurEcoute sv = new ServeurEcoute(port, ms);
+		sv.start();
+		Client client = new Client(addr, port);
+		client.start();
+		Integer i = client.store(value);
+		assertNotNull(i);
+		client.store(i, value2);
+		assertEquals(value2, client.get(i));
+		assertTrue(client.remove(i));
+		assertNull(client.get(i));
+		client.stop();
+		sv.halt();
     }
 }
