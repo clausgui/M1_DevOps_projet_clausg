@@ -32,9 +32,9 @@ public class ServeurThread  extends Thread  {
 		boolean stop = false;
 		Integer key;
 		Object value;
-		Pattern cmdPattern = Pattern.compile("(\\p{Upper}+) (.*)");
-		Pattern keyPattern = Pattern.compile("(\\d+)");
-		Pattern keyValPattern = Pattern.compile("(\\d+) (.*)");
+		Pattern cmdPattern = Pattern.compile("(\\p{Upper}+)(.*)");
+		Pattern keyPattern = Pattern.compile(" (\\d+)");
+		Pattern keyValPattern = Pattern.compile(" (\\d+) (.*)");
 		Matcher cmdMatcher, m;
 
 		System.out.println("ServeurThread " + id + " lancé");
@@ -52,8 +52,6 @@ public class ServeurThread  extends Thread  {
 					_bad_command();
 					continue;
 				}
-				//TODO : gestion des espaces
-				String[] args = msg.split(" ");
 
 				switch(cmdMatcher.group(1)) {
 					case "STO":
