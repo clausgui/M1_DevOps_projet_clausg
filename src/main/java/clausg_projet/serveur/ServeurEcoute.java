@@ -3,8 +3,8 @@ package clausg_projet.serveur;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Vector;
-import java.util.Iterator;
+import java.util.Deque;
+import java.util.LinkedList;
 
 import clausg_projet.MemStore;
 
@@ -17,7 +17,7 @@ public class ServeurEcoute extends Thread  {
 	private Socket socket;
 	private boolean continuer;
 	private MemStore store;
-	private Vector<ServeurThread> threads;
+	private Deque<ServeurThread> threads;
 
 
 
@@ -25,7 +25,11 @@ public class ServeurEcoute extends Thread  {
 		this.port = port;
 		this.store = memStore;
 		this.continuer = true;
-		this.threads = new Vector<>();
+		this.threads = new LinkedList<>();
+	}
+
+	public Integer getPort() {
+		return port;
 	}
 
 	/**
@@ -39,10 +43,10 @@ public class ServeurEcoute extends Thread  {
 		}
 		System.out.println("Serveur démarré, en attente de connexions sur le port " + port);
 		try {
-			while(continuer) {
+			while(continuer && serveurSocket != null) {
 				socket = serveurSocket.accept();
 				if (socket != null) {
-					threads.add(new ServeurThread(socket, store));
+					threads.addLast(new ServeurThread(socket, store));
 				}
 			}
 		} catch (IOException e) {
@@ -66,9 +70,8 @@ public class ServeurEcoute extends Thread  {
 		if (serveurSocket != null) {
 			serveurSocket.close();
 		}
-		Iterator<ServeurThread> it = threads.iterator();
-		while (it.hasNext()) {
-			ServeurThread sth = it.next();
+		while (! threads.isEmpty()) {
+			ServeurThread sth = threads.removeFirst();
 			if (sth != null) {
 				sth.halt();
 			}

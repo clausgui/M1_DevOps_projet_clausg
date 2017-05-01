@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.Serializable;
+import java.net.ConnectException;
 import java.net.InetAddress;
 import java.net.Socket;
 
@@ -35,11 +36,14 @@ public class Client {
 	 * start the client
 	 * @throws IOException if connection can't happen
 	 */
-	public void start() throws IOException {
+	public void start() throws IOException,ConnectException {
 		System.out.println("Démarrage du client " + id + " sur le port " + serveurPort);
 		socket = new Socket(InetAddress.getByName(serveurAddr), serveurPort);
-		in = new BufferedReader (new InputStreamReader (socket.getInputStream()));
-		out = new PrintWriter(socket.getOutputStream());
+		if (socket != null) {
+			in = new BufferedReader (new InputStreamReader (socket.getInputStream()));
+			out = new PrintWriter(socket.getOutputStream());
+			System.out.println("Client " + id + " connecté sur le port " + serveurPort);
+		}
 	}
 
 	/**

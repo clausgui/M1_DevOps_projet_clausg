@@ -1,5 +1,6 @@
 package clausg_projet.client;
 
+import java.net.ConnectException;
 import java.io.IOException;
 import org.junit.*;
 import static org.junit.Assert.*;
@@ -15,15 +16,15 @@ public class ClientTest {
 	@Rule
 	public Timeout globalTimeout= new Timeout(5000);
 
-	static final int port = 5299;
+	static int port = 5299;
 	static final String addr = "127.0.0.1";
 
     /**
      * Test un client sans serveur
      */
-	@Test (expected = IOException.class)
-    public void testClient() throws IOException  {
-		Client client = new Client(addr, port);
+	@Test (expected = ConnectException.class)
+    public void testClient() throws IOException ,ConnectException {
+		Client client = new Client(addr, port++);
 		client.start();
     }
 
@@ -31,7 +32,7 @@ public class ClientTest {
      * Test deux clients avec serveur
      */
 	@Test
-    public void testStartStop() throws IOException  {
+    public void testStartStop() throws IOException,ConnectException  {
 		MemStore ms = new MemStore();
 		ServeurEcoute sv = new ServeurEcoute(port, ms);
 		sv.start();
@@ -40,6 +41,7 @@ public class ClientTest {
 		client1.start();
 		client2.start();
 		sv.halt();
+		port++;
     }
 
     /**

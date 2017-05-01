@@ -26,33 +26,29 @@ public class MemStore {
 
 	/**
 	 * Maps the a newkey to the specified value in this table and returns the key.
-	 * //TODO : synchronisation
 	 * @param value the value
 	 * @return the new key
 	 */
 	public Integer store(Object value) {
-		Integer key = nextKey++;
-		_store(key, value);
-		return key;
+		return _store(null, value);
 	}
 
 	/**
 	 * Maps the specified key to the specified value in this table.
-	 * //TODO : synchronisation
 	 * @param key the key
 	 * @param value the value
+	 * @return key if not null or a new key
 	 */
-	public void store(Integer key, Object value) {
-		_store(key, value);
+	public Integer store(Integer key, Object value) {
+		return _store(key, value);
 	}
 
 	/**
 	 * Returns the value to which the specified key is mapped, or null if this map contains no mapping for the key.
-	 * //TODO : synchronisation
 	 * @param key  the key whose associated value is to be returned
 	 * @return the value to which the specified key is mapped, or null if this map contains no mapping for the key
 	 */
-	public Object get(Integer key) {
+	public synchronized Object get(Integer key) {
 		return table.get(key);
 	}
 
@@ -61,7 +57,7 @@ public class MemStore {
 	 * @param key the key that needs to be removed
 	 * @throws NullPointerException if the key is null
 	 */
-	public void remove(Integer key) throws NullPointerException {
+	public synchronized void remove(Integer key) throws NullPointerException {
 		table.remove(key);
 		lruList.remove(key);
 	}
@@ -71,7 +67,10 @@ public class MemStore {
 	 * @param key the key
 	 * @param value the value
 	 */
-	private void _store(Integer key, Object value) {
+	private synchronized Integer _store(Integer key, Object value) {
+		if (key == null) {
+			key = nextKey++;
+		}
 		table.put(key, value);
 		lruList.remove(key);
 		lruList.addLast(key);
@@ -79,5 +78,7 @@ public class MemStore {
 			Integer k = lruList.getFirst();
 			table.remove(k);
 		}
+		notify();
+		return key;
 	}
 }

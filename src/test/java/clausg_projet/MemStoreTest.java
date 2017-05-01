@@ -18,7 +18,6 @@ public class MemStoreTest {
 		store = new MemStore();
 	}
 
-
     /**
      * Teste un store/get
      */

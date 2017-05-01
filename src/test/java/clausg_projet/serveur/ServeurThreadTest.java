@@ -15,13 +15,13 @@ public class ServeurThreadTest {
 	@Rule
 	public Timeout globalTimeout= new Timeout(5000);
 
-	static final int port = 5296;
-	ServeurEcoute serveur;
+	static int port = 5296;
+	private ServeurEcoute serveur;
 
 
 	@Before
 	public void startServeur() {
-		serveur = new ServeurEcoute(port, new MemStore());
+		serveur = new ServeurEcoute(port++, new MemStore());
 		serveur.start();
 	}
 
@@ -35,7 +35,7 @@ public class ServeurThreadTest {
      */
 	@Test
     public void testServeurEcouteClient() throws IOException {
-		Client client = new Client("127.0.0.1", port);
+		Client client = new Client("127.0.0.1", serveur.getPort());
 		client.start();
     }
 
