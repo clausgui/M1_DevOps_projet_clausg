@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
  */
 public class AppClient {
 	private static final int defaultServeurPort = 5342;
-	private static final String defaultServeurAddr = "127.0.0.1";//"172.17.0.2";
+	private static final String defaultServeurAddr = "127.0.0.1";
 
 	private static Client client;
 	private static int serveurPort; // port d'écoute du serveur
@@ -52,6 +52,7 @@ public class AppClient {
 		try {
 			boolean stop = false;
 			Pattern cmdPattern = Pattern.compile("([a-z]+)(.*)");
+			Pattern valPattern = Pattern.compile(" (.*)");
 			Pattern keyPattern = Pattern.compile(" (\\d+)");
 			Pattern keyValPattern = Pattern.compile(" (\\d+) (.*)");
 			Matcher cmdMatcher, m;
@@ -59,7 +60,7 @@ public class AppClient {
 			String value;
 
 			client.start();
-			while (! stop && (cmd = console.readLine("Command ('help' for help):\n")) != null) {
+			while (! stop && (cmd = console.readLine("\nCommand ('help' for help):\n")) != null) {
 				cmdMatcher = cmdPattern.matcher(cmd);
 				if (! cmdMatcher.matches()) {
 					_bad_command();
@@ -67,7 +68,12 @@ public class AppClient {
 				}
 				switch(cmdMatcher.group(1)) {
 					case "sto":
-						key = client.store(cmdMatcher.group(2));
+						m = valPattern.matcher(cmdMatcher.group(2));
+						if (! m.matches()) {
+							_bad_command();
+							continue;
+						}
+						key = client.store(m.group(1));
 						console.printf("key: %d\n", key);
 						break;
 					case "stoto":
@@ -81,7 +87,7 @@ public class AppClient {
 						console.printf("key: %d\n", key);
 						break;
 					case "get":
-						m = keyPattern.matcher(cmdMatcher.group(2));
+						m = valPattern.matcher(cmdMatcher.group(2));
 						if (! m.matches()) {
 							_bad_command();
 							continue;
@@ -91,7 +97,7 @@ public class AppClient {
 						if (value == null) {
 							console.printf("no value\n");
 						} else {
-							console.printf("value: %s\n", value);
+							console.printf("value: '%s'\n", value);
 						}
 						break;
 					case "del":

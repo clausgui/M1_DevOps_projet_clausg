@@ -8,6 +8,8 @@ import java.io.Serializable;
 import java.net.ConnectException;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Class Client
@@ -37,7 +39,7 @@ public class Client {
 	 * @throws IOException if connection can't happen
 	 */
 	public void start() throws IOException,ConnectException {
-		System.out.println("Démarrage du client " + id + " sur le port " + serveurPort);
+		System.out.println("Démarrage du client " + id + " sur le serveur " + serveurAddr + " port " + serveurPort);
 		socket = new Socket(InetAddress.getByName(serveurAddr), serveurPort);
 		if (socket != null) {
 			in = new BufferedReader (new InputStreamReader (socket.getInputStream()));
@@ -64,7 +66,6 @@ public class Client {
 		out.print("STO " + value + "\n");
 		out.flush();
 		String msg = in.readLine();
-		System.out.println("Le client " + id + " a reçu : '" + msg + "'");
 		String[] args = msg.split(" ");
 		if (args.length == 2 && args[0].equals("1")) {
 			return Integer.valueOf(args[1]);
@@ -74,12 +75,10 @@ public class Client {
 
 	/**
 	 */
-	// TODO : gestion des espace dans la valeur
 	public Integer store(Integer key, String value) throws IOException {
 		out.print("STOTO " + key + " " + value + "\n");
 		out.flush();
 		String msg = in.readLine();
-		System.out.println("Le client " + id + " a reçu : '" + msg + "'");
 		String[] args = msg.split(" ");
 		if (args.length == 2 && args[0].equals("1")) {
 			return Integer.valueOf(args[1]);
@@ -89,22 +88,21 @@ public class Client {
 
 	// TODO : gestion des espaces dans la valeur de retour
 	public String get(Integer key) throws IOException {
+		Pattern cmdPattern = Pattern.compile("(\\d+)(| (.*))");
 		out.print("GET " + key + "\n");
 		out.flush();
 		String msg = in.readLine();
-		System.out.println("Le client " + id + " a reçu : '" + msg + "'");
-		String[] args = msg.split(" ");
-		if (args.length >= 2 && args[0].equals("1")) {
-			return args[1];
+		Matcher cmdMatcher = cmdPattern.matcher(msg);
+		if (! cmdMatcher.matches() || ! cmdMatcher.group(1).equals("1")) {
+			return null;
 		}
-		return null;
+		return cmdMatcher.group(3);
 	}
 
 	public boolean remove(Integer key) throws IOException {
 		out.print("DEL " + key + "\n");
 		out.flush();
 		String msg = in.readLine();
-		System.out.println("Le client " + id + " a reçu : '" + msg + "'");
 		String[] args = msg.split(" ");
 		if (args.length >= 1 && args[0].equals("1")) {
 			return true;

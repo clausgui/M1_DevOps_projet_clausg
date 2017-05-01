@@ -34,6 +34,7 @@ public class ServeurThread  extends Thread  {
 		Object value;
 		Pattern cmdPattern = Pattern.compile("(\\p{Upper}+)(.*)");
 		Pattern keyPattern = Pattern.compile(" (\\d+)");
+		Pattern valPattern = Pattern.compile(" (.*)");
 		Pattern keyValPattern = Pattern.compile(" (\\d+) (.*)");
 		Matcher cmdMatcher, m;
 
@@ -55,7 +56,12 @@ public class ServeurThread  extends Thread  {
 
 				switch(cmdMatcher.group(1)) {
 					case "STO":
-						key = store.store(cmdMatcher.group(2));
+						m = valPattern.matcher(cmdMatcher.group(2));
+						if (! m.matches()) {
+							_bad_command();
+							continue;
+						}
+						key = store.store(m.group(1));
 						_send(key);
 						break;
 					case "STOTO":
