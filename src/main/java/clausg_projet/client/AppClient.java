@@ -40,8 +40,11 @@ public class AppClient {
 		client = new Client(serveurAddr, serveurPort);
 		try {
 			client.start();
+
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
 		}
+
+
     }
 }

@@ -87,7 +87,6 @@ public class Client {
 		return null;
 	}
 
-
 	// TODO : gestion des espaces dans la valeur de retour
 	public String get(Integer key) throws IOException {
 		out.print("GET " + key + "\n");

@@ -5,6 +5,8 @@ import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import clausg_projet.MemStore;
 
@@ -30,6 +32,10 @@ public class ServeurThread  extends Thread  {
 		boolean stop = false;
 		Integer key;
 		Object value;
+		Pattern cmdPattern = Pattern.compile("(\\p{Upper}+) (.*)");
+		Pattern keyPattern = Pattern.compile("(\\d+)");
+		Pattern keyValPattern = Pattern.compile("(\\d+) (.*)");
+		Matcher cmdMatcher, m;
 
 		System.out.println("ServeurThread " + id + " lancé");
 		try {
@@ -41,44 +47,49 @@ public class ServeurThread  extends Thread  {
 					continue;
 				}
 				System.out.println("ServeurThread " + id + " a reçu '" + msg + "'");
+				cmdMatcher = cmdPattern.matcher(msg);
+				if (! cmdMatcher.matches()) {
+					_bad_command();
+					continue;
+				}
 				//TODO : gestion des espaces
 				String[] args = msg.split(" ");
 
-				switch(args[0]) {
+				switch(cmdMatcher.group(1)) {
 					case "STO":
-						if (args.length == 2) {
-							key = store.store(args[1]);
-							_send(key);
-						} else {
-							_bad_command();
-						}
+						key = store.store(cmdMatcher.group(2));
+						_send(key);
 						break;
 					case "STOTO":
-						if (args.length == 3) {
-							key = Integer.valueOf(args[1]);
-							store.store(key, args[2]);
-							_send(key);
-						} else {
+						m = keyValPattern.matcher(cmdMatcher.group(2));
+						if (! m.matches()) {
 							_bad_command();
+							continue;
 						}
+						key = Integer.valueOf(m.group(1));
+						store.store(key, m.group(2));
+						_send(key);
 						break;
 					case "GET":
-						if (args.length == 2) {
-							key = Integer.valueOf(args[1]);
-							value = store.get(key);
-							_send(value);
-						} else {
+						m = keyPattern.matcher(cmdMatcher.group(2));
+						if (! m.matches()) {
 							_bad_command();
+							continue;
 						}
+						key = Integer.valueOf(m.group(1));
+						value = store.get(key);
+						_send(value);
 						break;
 					case "DEL":
-						if (args.length == 2) {
-							key = Integer.valueOf(args[1]);
-							store.remove(key);
-							_send("");
-						} else {
+						m = keyPattern.matcher(cmdMatcher.group(2));
+						if (! m.matches()) {
 							_bad_command();
+							continue;
 						}
+						key = Integer.valueOf(m.group(1));
+						value = store.get(key);
+						store.remove(key);
+						_send("");
 						break;
 					case  "QUIT":
 						stop = true;

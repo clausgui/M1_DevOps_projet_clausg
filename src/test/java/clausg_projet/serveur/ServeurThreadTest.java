@@ -8,6 +8,9 @@ import org.junit.rules.Timeout;
 import clausg_projet.MemStore;
 import clausg_projet.client.Client;
 
+// TODO tester avec de mauvaise commande, ou avec des valeurs null; " "
+
+
 /**
  * Unit test for ServeurThread
  */
