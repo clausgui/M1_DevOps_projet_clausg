@@ -5,7 +5,7 @@ import org.junit.*;
 import static org.junit.Assert.assertTrue;
 import org.junit.rules.Timeout;
 
-import clausg_projet.MemStore;
+import clausg_projet.store.MemStore;
 import clausg_projet.client.Client;
 
 /**

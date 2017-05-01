@@ -6,7 +6,7 @@ import java.net.Socket;
 import java.util.Deque;
 import java.util.LinkedList;
 
-import clausg_projet.MemStore;
+import clausg_projet.store.MemStore;
 
 /**
  * Class ServeurEcoute

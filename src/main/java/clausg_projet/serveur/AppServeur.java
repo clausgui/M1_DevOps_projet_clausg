@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.lang.NumberFormatException;
 import java.util.Scanner;
 
-import clausg_projet.MemStore;
+import clausg_projet.store.MemStore;
 
 /**
  * AppServeur

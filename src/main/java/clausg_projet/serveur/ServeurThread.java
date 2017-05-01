@@ -8,7 +8,7 @@ import java.net.Socket;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import clausg_projet.MemStore;
+import clausg_projet.store.MemStore;
 
 /**
  * Class ServeurThread

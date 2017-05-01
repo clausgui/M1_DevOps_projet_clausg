@@ -1,4 +1,4 @@
-package clausg_projet;
+package clausg_projet.store;
 
 import java.util.ArrayDeque;
 import java.util.Hashtable;
