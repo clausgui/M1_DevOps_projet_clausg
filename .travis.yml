@@ -6,7 +6,7 @@ services:
     - docker
 
 before_install:
-    - docker build -t serveur -f Dockerfile ./
+    - docker build -t serveur -f Dockerfile .
 
 after_success:
   - if [ "$TRAVIS_BRANCH" == "master" ]; then
