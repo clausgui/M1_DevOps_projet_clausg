@@ -1,25 +1,94 @@
 # M1_DevOps_projet_clausg
 Projet pour M1 info DevOps
 
-• Une liste des fonctionnalités validées à l’aide de tests unitaires.
-• Un manuel d’utilisation du client et du serveur, le cas échéant.
-• Une liste et une courte description des images disponibles sur Docker Hub, le cas échéant.
-• Une partie feedback dans laquelle vous donnerez votre retour d’expérience sur Travis. Vous
-pouvez aussi y ajouter vos commentaires/suggestions par rapport au projet.
+*****************
+*Fonctionnalités*
+*****************
+Le package clausg_projet.store
+contient une unique classe MemStore qui est implémente un stockage en mémoire. Ses fonctionnalités sont les suivantes :
+• Association clé (Integer) - valeur (Object)
+• Mise une place d'une politique de LRU
+• Utilisation en mode multi-thread
 
+Les packages clausg_projet.serveur et clausg_projet.client
+contiennent les classe interfaçant le MemStore à travers une relation Client-Serveur.
+AppServeur et AppClient sont deux applications qui permettre d'une lancer le serveur et de lancer plusieurs clients. L'interaction se fait à travers la console liée à chaque client (dans ce contexte, seule une association cle(Integer)-valeur(String) est gérée).
+la classe Client fourni une API pour interagir avec le serveur.
 
-# Génération de la documentation:
+*******
+*Tests*
+*******
+Les fonctionnalités de MemStore ont fait l'objet de tests unitaires, à l'éxception des méchanisme de synchronisation
+
+Les fonctionnalités Client/Serveur sont incomplétement testées.
+
+Les tests ont été faits via JUnit et un rapport de converture de test est généré par JaCoCo.
+
+*****************
+*Outils utilisés*
+*****************
+La gestion du projet a été faite grace à maven.
+Les tests ont été faits via JUnit et un rapport de converture de code est généré par JaCoCo.
+Le code a été versionné avec Git et un dépot github.
+Travis a été utilisé : d'une part pour refaire les tests de manière externalisée.
+Des essais de construction d'images Docker grace à Travis bloquent sur l'instruction COPY du Dockerfile.
+Docker a été utilisé en local pour créer des images executable
+Des essais de construction automatique d'images sur Docker Hub bloquent également sur l'instruction COPY du Dockerfile.
+
+****************************
+*Compilation et Utilisation*
+****************************
+
+*** jar ***
+# compilation et tests :
+mvn test
+
+# création du jar:
+mvn package
+
+# génération de la documentation :
 mvn javadoc:javadoc
 
-# Utilisation de docker :
-# Construction des images docker
-docker-compose build
+
+# lancement du serveur :
+java -cp target/M1_DevOps_projet_clausg-1.0.jar clausg_projet.serveur.AppServeur [numero_de_port]
+
+# lancement de clients :
+java -cp target/M1_DevOps_projet_clausg-1.0.jar clausg_projet.client.AppClient [[adresse_du_serveur] numero_de_port]
+
+*** Docker ***
+# création des images Docker client et serveur :
 docker build -t client -f Dockerfile_client ./
 docker build -t serveur -f Dockerfile ./
-#utilisation
+
+# utilisation des images Docker :
 docker run -ti -p5432:5432 --name serv serveur
 docker run -ti --link serv:serveur client
 
-#ou
-docker-compose up -d serveur
+# création de la composition contenant le client et le serveur :
+docker-compose build
+
+# utilisation de la composition:
+docker-compose up [-d] serveur
 docker-compose run client
+
+
+
+
+
+************
+* Feedback *
+************
+Un peu perdu dans l'univers Docker...
+Une incompréhension : les images sont bien crées en local, mais ni sur Travis, ni sur Docker Hub avec la même erreur :
+Step 3/6 : COPY target/M1_DevOps_projet_clausg-1.0.jar projet.jar
+lstat target/M1_DevOps_projet_clausg-1.0.jar: no such file or directory
+
+pour un "RUN ls target/" dans le dockerfile fait bien apparaitre le fichier,
+mais le container semble supprimé avant que la copie n'ait lieu...
+
+
+Au niveau des test, les tests du multithreading, du client serveur me laissent un peu démuni...
+Quand à la couverture de code, je ne vois pas comment déclencher toutes les execptions qui peuvent être interceptées...
+
+
