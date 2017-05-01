@@ -1,0 +1,11 @@
+version: '3'
+services:
+    serveur:
+        build:
+            context: .
+            dockerfile: Dockerfile
+    client:
+        build:
+            context: .
+            dockerfile: Dockerfile_client
+        #command: ["./wait-for-it.sh", "serveur:5432", "--", "java", "-cp",  "projet.jar", "clausg_projet.client.AppClient"]

@@ -13,9 +13,13 @@ mvn javadoc:javadoc
 
 # Utilisation de docker :
 # Construction des images docker
+docker-compose build
 docker build -t client -f Dockerfile_client ./
-docker build -t serveur -f Dockerfile_seveur ./
+docker build -t serveur -f Dockerfile ./
 #utilisation
-
 docker run -ti -p5432:5432 --name serv serveur
 docker run -ti --link serv:serveur client
+
+#ou
+docker-compose up -d serveur
+docker-compose run client
