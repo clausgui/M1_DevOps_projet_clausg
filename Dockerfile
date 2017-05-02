@@ -4,7 +4,7 @@ LABEL maintainer "GuiΩ <guillaume.claus@worldonline.fr>"
 #RUN mvn install
 # RUN ls target/
 
-COPY target/M1_DevOps_projet_clausg-1.0.jar projet.jar
+ADD target/M1_DevOps_projet_clausg-1.0.jar projet.jar
 
 # COPY M1_DevOps_projet_clausg-1.0.jar projet.jar
 
